@@ -11,6 +11,7 @@ import io.reactivex.Observable;
 import io.reactivex.rxjavafx.schedulers.JavaFxScheduler;
 import io.reactivex.schedulers.Schedulers;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -82,7 +83,7 @@ public class GameApp extends Application {
 
     public Channel getCanal() {
         if(canal == null){
-            canal = ManagedChannelBuilder.forAddress("localhost", 50051)
+            canal = ManagedChannelBuilder.forAddress("191.252.92.246", 9280)
                     .usePlaintext(true).build();
         }
         return canal;
@@ -106,6 +107,8 @@ public class GameApp extends Application {
                 = UsuariosGrpc.newBlockingStub(GameApp.getInstance().getCanal());
         SairRequest request = SairRequest.newBuilder().setNome(usuarioAutenticado).build();
         stub.sair(request);
+
         super.stop();
+
     }
 }
