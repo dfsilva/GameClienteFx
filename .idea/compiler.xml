@@ -4,6 +4,8 @@
     <bytecodeTargetLevel>
       <module name="br.com.anhanguera.gameclientfx_main" target="1.8" />
       <module name="br.com.anhanguera.gameclientfx_test" target="1.8" />
+      <module name="GameClientFx_main" target="1.8" />
+      <module name="GameClientFx_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
