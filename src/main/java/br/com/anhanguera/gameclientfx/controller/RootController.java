@@ -14,12 +14,18 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 
 /**
  * Created by diego on 15/06/17.
  */
 public class RootController implements Initializable {
+
+    private static class OperacoesUsuario{
+        public static final int INCLUSAO = 0;
+        public static final int EXCLUCAO = 1;
+    }
 
 
     private static final String TAG = RootController.class.getName();
@@ -46,7 +52,17 @@ public class RootController implements Initializable {
             @Override
             public void onNext(final Usuario value) {
                 //adicionar usuario na tabela
-                usuarios.add(new UsuarioVm( new SimpleStringProperty(value.getNome())));
+                if(value.getOp() == OperacoesUsuario.INCLUSAO) {
+                    usuarios.add(new UsuarioVm(new SimpleStringProperty(value.getNome())));
+                }else{
+                    Iterator<UsuarioVm> it = usuarios.iterator();
+                    while (it.hasNext()){
+                        UsuarioVm u = it.next();
+                        if(u.nome.getValue().equals(value.getNome())){
+                            it.remove();
+                        }
+                    }
+                }
                 tbUsuarios.refresh();
             }
             @Override
@@ -94,5 +110,7 @@ public class RootController implements Initializable {
             return nome;
         }
     }
+
+
 
 }

@@ -1,8 +1,15 @@
 package br.com.anhanguera.gameclientfx;
 
 import br.com.anhanguera.gameclientfx.controller.RootController;
+import br.com.diegosilva.grpc.hello.AutenticacaoGrpc;
+import br.com.diegosilva.grpc.hello.AutenticacaoRequest;
+import br.com.diegosilva.grpc.hello.SairRequest;
+import br.com.diegosilva.grpc.hello.UsuariosGrpc;
 import io.grpc.Channel;
 import io.grpc.ManagedChannelBuilder;
+import io.reactivex.Observable;
+import io.reactivex.rxjavafx.schedulers.JavaFxScheduler;
+import io.reactivex.schedulers.Schedulers;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -93,4 +100,12 @@ public class GameApp extends Application {
         alert.showAndWait();
     }
 
+    @Override
+    public void stop() throws Exception {
+        UsuariosGrpc.UsuariosBlockingStub stub
+                = UsuariosGrpc.newBlockingStub(GameApp.getInstance().getCanal());
+        SairRequest request = SairRequest.newBuilder().setNome(usuarioAutenticado).build();
+        stub.sair(request);
+        super.stop();
+    }
 }
