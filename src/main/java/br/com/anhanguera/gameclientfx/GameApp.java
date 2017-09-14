@@ -81,9 +81,15 @@ public class GameApp extends Application {
         return usuarioAutenticado;
     }
 
+    public boolean isUsuarioAutenticado(){
+        return usuarioAutenticado != null && !"".equals(usuarioAutenticado);
+    }
+
     public Channel getCanal() {
         if(canal == null){
-            canal = ManagedChannelBuilder.forAddress("191.252.92.246", 9280)
+//            canal = ManagedChannelBuilder.forAddress("191.252.92.246", 9280)
+//                    .usePlaintext(true).build();
+            canal = ManagedChannelBuilder.forAddress("localhost", 50051)
                     .usePlaintext(true).build();
         }
         return canal;
@@ -103,12 +109,18 @@ public class GameApp extends Application {
 
     @Override
     public void stop() throws Exception {
-        UsuariosGrpc.UsuariosBlockingStub stub
-                = UsuariosGrpc.newBlockingStub(GameApp.getInstance().getCanal());
-        SairRequest request = SairRequest.newBuilder().setNome(usuarioAutenticado).build();
-        stub.sair(request);
-
-        super.stop();
-
+        Thread exitThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if(isUsuarioAutenticado()){
+                    UsuariosGrpc.UsuariosBlockingStub stub = UsuariosGrpc.newBlockingStub(GameApp.getInstance().getCanal());
+                    SairRequest request = SairRequest.newBuilder().setNome(usuarioAutenticado).build();
+                    stub.sair(request);
+                    System.exit(0);
+                }
+            }
+        });
+        exitThread.setDaemon(true);
+        exitThread.start();
     }
 }
