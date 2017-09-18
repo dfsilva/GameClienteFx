@@ -68,7 +68,7 @@ public class LoginController implements Initializable {
         });
 
         btnCancelar.setOnAction(ev -> {
-
+            System.exit(0);
         });
     }
 

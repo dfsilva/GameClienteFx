@@ -87,9 +87,7 @@ public class GameApp extends Application {
 
     public Channel getCanal() {
         if(canal == null){
-//            canal = ManagedChannelBuilder.forAddress("191.252.92.246", 9280)
-//                    .usePlaintext(true).build();
-            canal = ManagedChannelBuilder.forAddress("localhost", 50051)
+            canal = ManagedChannelBuilder.forAddress("grpc.diegosilva.com.br", 8080)
                     .usePlaintext(true).build();
         }
         return canal;
