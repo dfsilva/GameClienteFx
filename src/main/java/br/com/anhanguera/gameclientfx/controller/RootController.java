@@ -88,7 +88,6 @@ public class RootController implements Initializable {
     }
 
 
-
     private void registrarStreamUsuarios(){
         Usuario request = Usuario.newBuilder().setNome(GameApp.getInstance().getUsuarioAutenticado()).build();
         UsuariosGrpc.UsuariosStub stub = UsuariosGrpc.newStub(GameApp.getInstance().getCanal());

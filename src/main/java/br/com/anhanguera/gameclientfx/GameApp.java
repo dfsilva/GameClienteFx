@@ -2,16 +2,11 @@ package br.com.anhanguera.gameclientfx;
 
 import br.com.anhanguera.gameclientfx.controller.RootController;
 import br.com.diegosilva.grpc.hello.AutenticacaoGrpc;
-import br.com.diegosilva.grpc.hello.AutenticacaoRequest;
 import br.com.diegosilva.grpc.hello.SairRequest;
 import br.com.diegosilva.grpc.hello.UsuariosGrpc;
 import io.grpc.Channel;
 import io.grpc.ManagedChannelBuilder;
-import io.reactivex.Observable;
-import io.reactivex.rxjavafx.schedulers.JavaFxScheduler;
-import io.reactivex.schedulers.Schedulers;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -87,7 +82,7 @@ public class GameApp extends Application {
 
     public Channel getCanal() {
         if(canal == null){
-            canal = ManagedChannelBuilder.forAddress("grpc.diegosilva.com.br", 8080)
+            canal = ManagedChannelBuilder.forAddress("localhost", 50051)
                     .usePlaintext(true).build();
         }
         return canal;
@@ -111,7 +106,7 @@ public class GameApp extends Application {
             @Override
             public void run() {
                 if(isUsuarioAutenticado()){
-                    UsuariosGrpc.UsuariosBlockingStub stub = UsuariosGrpc.newBlockingStub(GameApp.getInstance().getCanal());
+                    AutenticacaoGrpc.AutenticacaoBlockingStub stub = AutenticacaoGrpc.newBlockingStub(GameApp.getInstance().getCanal());
                     SairRequest request = SairRequest.newBuilder().setNome(usuarioAutenticado).build();
                     stub.sair(request);
                     System.exit(0);

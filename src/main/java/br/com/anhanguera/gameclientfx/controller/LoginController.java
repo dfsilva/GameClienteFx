@@ -48,8 +48,10 @@ public class LoginController implements Initializable {
 
         btnEntrar.setOnAction(ev -> {
             progress.show("Entrando...");
-            Observable.fromCallable(()->{
-                AutenticacaoGrpc.AutenticacaoBlockingStub stub
+
+            //codigo asincrono
+             Observable.fromCallable(()->{
+              AutenticacaoGrpc.AutenticacaoBlockingStub stub
                         = AutenticacaoGrpc.newBlockingStub(GameApp.getInstance().getCanal());
                 AutenticacaoRequest request = AutenticacaoRequest.newBuilder()
                         .setUsuario(txUsuario.getText()).build();
@@ -65,6 +67,33 @@ public class LoginController implements Initializable {
                     exibirTelaPrincipal();
                 }
             });
+
+             /*
+             código sincrono
+            progress.show("Entrando...");
+
+            AutenticacaoGrpc.AutenticacaoBlockingStub stub
+                    = AutenticacaoGrpc.newBlockingStub(GameApp.getInstance().getCanal());
+            AutenticacaoRequest request = AutenticacaoRequest.newBuilder()
+                    .setUsuario(txUsuario.getText()).build();
+            AutenticacaoResponse response = stub.autenticar(request);
+
+            progress.hide();
+
+            if(response.getCodigo() < 0){
+                GameApp.getInstance().showErrorMessage(Optional.of("Erro ao efetuar login"),
+                        Optional.empty(), Optional.ofNullable(response.getMessage()));
+            }else{
+                GameApp.getInstance().setUsuarioAutenticado(txUsuario.getText());
+                try {
+                    exibirTelaPrincipal();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            */
+
         });
 
         btnCancelar.setOnAction(ev -> {
